@@ -1,3 +1,6 @@
+if exists('g:polyglot_disabled') && index(g:polyglot_disabled, 'javascript') != -1
+  finish
+endif
 " Vim syntax file
 " Language:     JavaScript
 " Maintainer:   vim-javascript community
