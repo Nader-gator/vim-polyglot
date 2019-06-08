@@ -290,6 +290,41 @@ autocmd BufRead,BufNewFile *.dart set filetype=dart
   augroup end
 endif
 
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dlang') == -1
+  augroup filetypedetect
+  " dlang, from d.vim in JesseKPhillips/d.vim
+autocmd BufNewFile,BufRead *.d setf d
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dlang') == -1
+  augroup filetypedetect
+  " dlang, from dcov.vim in JesseKPhillips/d.vim
+autocmd BufNewFile,BufRead *.lst set filetype=dcov
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dlang') == -1
+  augroup filetypedetect
+  " dlang, from dd.vim in JesseKPhillips/d.vim
+au BufRead,BufNewFile *.dd set filetype=dd
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dlang') == -1
+  augroup filetypedetect
+  " dlang, from ddoc.vim in JesseKPhillips/d.vim
+au BufRead,BufNewFile *.ddoc set filetype=ddoc
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dlang') == -1
+  augroup filetypedetect
+  " dlang, from dsdl.vim in JesseKPhillips/d.vim
+autocmd BufNewFile,BufRead *.sdl set filetype=dsdl
+  augroup end
+endif
+
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'dockerfile') == -1
   augroup filetypedetect
   " dockerfile, from Dockerfile.vim in ekalinin/Dockerfile.vim
@@ -507,6 +542,16 @@ autocmd BufNewFile,BufRead *.hx setf haxe
   augroup end
 endif
 
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'hcl') == -1
+  augroup filetypedetect
+  " hcl, from hcl.vim in b4b4r07/vim-hcl
+autocmd BufNewFile,BufRead *.hcl set filetype=hcl
+autocmd BufNewFile,BufRead *.nomad set filetype=hcl
+autocmd BufNewFile,BufRead *.tf set filetype=hcl
+autocmd BufNewFile,BufRead Appfile set filetype=hcl
+  augroup end
+endif
+
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'hive') == -1
   augroup filetypedetect
   " hive, from hive.vim in zebradil/hive.vim
@@ -538,6 +583,19 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'idris') == -1
   augroup filetypedetect
   " idris, from lidris.vim in idris-hackers/idris-vim
 au BufNewFile,BufRead *.lidr setf lidris
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ion') == -1
+  augroup filetypedetect
+  " ion, from ion.vim in vmchale/ion-vim
+autocmd BufNewFile,BufRead ~/.config/ion/initrc set filetype=ion
+autocmd BufNewFile,BufRead *.ion set filetype=ion
+
+autocmd BufNewFile,BufRead,StdinReadPost *
+    \ if getline(1) =~ '^#!.*\Wion\s*$' |
+    \   set ft=ion |
+    \ endif
   augroup end
 endif
 
@@ -603,59 +661,6 @@ au BufNewFile,BufRead *.jst set filetype=jst
 au BufNewFile,BufRead *.djs set filetype=jst
 au BufNewFile,BufRead *.hamljs set filetype=jst
 au BufNewFile,BufRead *.ect set filetype=jst
-  augroup end
-endif
-
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'jsx') == -1
-  augroup filetypedetect
-  " jsx, from javascript.vim in amadeus/vim-jsx
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim ftdetect file
-"
-" Language: JSX (JavaScript)
-" Maintainer: Max Wang <mxawng@gmail.com>
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let s:jsx_pragma_pattern = '\%^\_s*\/\*\*\%(\_.\%(\*\/\)\@!\)*@jsx\_.\{-}\*\/'
-
-" if g:jsx_check_react_import == 1
-"   parse the first line of js file (skipping comments). When it has a 'react'
-"   importation, we guess the user writes jsx
-" endif
-let s:jsx_prevalent_pattern =
-      \ '\v\C%^\_s*%(%(//.*\_$|/\*\_.{-}\*/)@>\_s*)*%(import\s+\k+\s+from\s+|%(\l+\s+)=\k+\s*\=\s*require\s*\(\s*)[`"'']react>'
-
-" Whether to set the JSX filetype on *.js files.
-fu! <SID>EnableJSX()
-  " Whether the .jsx extension is required.
-  if !exists('g:jsx_ext_required')
-    let g:jsx_ext_required = 0
-  endif
-
-  " Whether the @jsx pragma is required.
-  if !exists('g:jsx_pragma_required')
-    let g:jsx_pragma_required = 0
-  endif
-
-  if g:jsx_pragma_required && !exists('b:jsx_ext_found')
-    " Look for the @jsx pragma.  It must be included in a docblock comment
-    " before anything else in the file (except whitespace).
-    let b:jsx_pragma_found = search(s:jsx_pragma_pattern, 'npw')
-  endif
-
-  if g:jsx_pragma_required && !b:jsx_pragma_found | return 0 | endif
-  if g:jsx_ext_required && !exists('b:jsx_ext_found') &&
-        \ !(get(g:,'jsx_check_react_import') && search(s:jsx_prevalent_pattern, 'nw'))
-    return 0
-  endif
-  return 1
-endfu
-
-autocmd BufNewFile,BufRead *.jsx let b:jsx_ext_found = 1
-autocmd BufNewFile,BufRead *.jsx set filetype=javascript.jsx
-autocmd BufNewFile,BufRead *.js
-  \ if <SID>EnableJSX() | set filetype=javascript.jsx | endif
   augroup end
 endif
 
@@ -1098,6 +1103,17 @@ au BufNewFile,BufRead .merlin       set ft=merlin
   augroup end
 endif
 
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'rego') == -1
+  augroup filetypedetect
+  " rego, from rego.vim in tsandall/vim-rego
+autocmd BufRead,BufNewFile *.rego set filetype=rego
+
+" Use # as a comment prefix
+setlocal comments=b:#,fb:-
+setlocal commentstring=#\ %s
+  augroup end
+endif
+
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
   augroup filetypedetect
   " ruby, from ruby.vim in vim-ruby/vim-ruby
@@ -1349,13 +1365,6 @@ au BufNewFile,BufRead *.thrift setlocal filetype=thrift
   augroup end
 endif
 
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'tmux') == -1
-  augroup filetypedetect
-  " tmux, from tmux.vim in keith/tmux.vim
-autocmd BufNewFile,BufRead {.,}tmux*.conf* setfiletype tmux
-  augroup end
-endif
-
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'toml') == -1
   augroup filetypedetect
   " toml, from toml.vim in cespare/vim-toml
@@ -1374,22 +1383,6 @@ au BufRead,BufNewFile *.tptp set filetype=tptp
 au BufRead,BufNewFile *.tptp set syntax=tptp
 au BufRead,BufNewFile *.ax set filetype=tptp
 au BufRead,BufNewFile *.ax set syntax=tptp
-  augroup end
-endif
-
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'tsx') == -1
-  augroup filetypedetect
-  " tsx, from typescript.vim in ianks/vim-tsx
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim ftdetect file
-"
-" Language: TSX (JavaScript)
-" Maintainer: Ian Ker-Seymer <i.kerseymer@gmail.com>
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-autocmd BufNewFile,BufRead *.tsx let b:tsx_ext_found = 1
-autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
   augroup end
 endif
 
@@ -1464,6 +1457,13 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'xdc') == -1
   " xdc, from xdc.vim in amal-khailtash/vim-xdc-syntax
 " xdc
 autocmd BufNewFile,BufRead *.xdc setfiletype xdc
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'zig') == -1
+  augroup filetypedetect
+  " zig, from zig.vim in ziglang/zig.vim
+au BufRead,BufNewFile *.zig set filetype=zig
   augroup end
 endif
 
