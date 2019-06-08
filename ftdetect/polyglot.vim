@@ -1,3 +1,9 @@
+function! s:setf(filetype) abort
+  if &filetype !=# a:filetype
+    let &filetype = a:filetype
+  endif
+endfunction
+
 " Enable jsx syntax by default
 if !exists('g:jsx_ext_required')
   let g:jsx_ext_required = 0
@@ -79,9 +85,6 @@ augroup filetypedetect
 
   "jinja
   autocmd BufNewFile,BufRead *.jinja2,*.j2,*.jinja,*.nunjucks,*.nunjs,*.njk set ft=jinja
-
-  "tsx
-  autocmd BufNewFile,BufRead *.tsx setfiletype typescript.jsx
 augroup END
 
 " Fix for https://github.com/sheerun/vim-polyglot/issues/236#issuecomment-387984954
@@ -504,6 +507,15 @@ autocmd BufNewFile,BufRead *.hx setf haxe
   augroup end
 endif
 
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'hive') == -1
+  augroup filetypedetect
+  " hive, from hive.vim in zebradil/hive.vim
+autocmd BufNewFile,BufRead *.hql set filetype=hive
+autocmd BufNewFile,BufRead *.ql set filetype=hive
+autocmd BufNewFile,BufRead *.q set filetype=hive
+  augroup end
+endif
+
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'i3') == -1
   augroup filetypedetect
   " i3, from i3config.vim in mboughaba/i3config.vim
@@ -703,6 +715,15 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'llvm') == -1
   augroup filetypedetect
   " llvm, from tablegen.vim in rhysd/vim-llvm
 au BufRead,BufNewFile *.td set filetype=tablegen
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'log') == -1
+  augroup filetypedetect
+  " log, from log.vim in MTDL9/vim-log-highlighting
+
+au BufNewFile,BufRead *.log set filetype=log
+au BufNewFile,BufRead *_log set filetype=log
   augroup end
 endif
 
@@ -1202,8 +1223,14 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'rust') == -1
   " rust, from rust.vim in rust-lang/rust.vim
 " vint: -ProhibitAutocmdWithNoGroup
 
-autocmd BufRead,BufNewFile *.rs setf rust
+autocmd BufRead,BufNewFile *.rs call s:set_rust_filetype()
 autocmd BufRead,BufNewFile Cargo.toml setf FALLBACK cfg
+
+function! s:set_rust_filetype() abort
+    if &filetype !=# 'rust'
+        set filetype=rust
+    endif
+endfunction
 
 " vim: set et sw=4 sts=4 ts=8:
   augroup end
@@ -1294,10 +1321,10 @@ endif
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'terraform') == -1
   augroup filetypedetect
   " terraform, from terraform.vim in hashivim/vim-terraform
-au BufRead,BufNewFile *.tf setlocal filetype=terraform
-au BufRead,BufNewFile *.tfvars setlocal filetype=terraform
-au BufRead,BufNewFile *.tfstate setlocal filetype=json
-au BufRead,BufNewFile *.tfstate.backup setlocal filetype=json
+autocmd BufRead,BufNewFile *.tf set filetype=terraform
+autocmd BufRead,BufNewFile *.tfvars set filetype=terraform
+autocmd BufRead,BufNewFile *.tfstate set filetype=json
+autocmd BufRead,BufNewFile *.tfstate.backup set filetype=json
   augroup end
 endif
 
@@ -1334,6 +1361,35 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'toml') == -1
   " toml, from toml.vim in cespare/vim-toml
 " Go dep and Rust use several TOML config files that are not named with .toml.
 autocmd BufNewFile,BufRead *.toml,Gopkg.lock,Cargo.lock,*/.cargo/config,*/.cargo/credentials,Pipfile setf toml
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'tptp') == -1
+  augroup filetypedetect
+  " tptp, from tptp.vim in c-cube/vim-tptp
+
+au BufRead,BufNewFile *.p set filetype=tptp
+au BufRead,BufNewFile *.p set syntax=tptp
+au BufRead,BufNewFile *.tptp set filetype=tptp
+au BufRead,BufNewFile *.tptp set syntax=tptp
+au BufRead,BufNewFile *.ax set filetype=tptp
+au BufRead,BufNewFile *.ax set syntax=tptp
+  augroup end
+endif
+
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'tsx') == -1
+  augroup filetypedetect
+  " tsx, from typescript.vim in ianks/vim-tsx
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim ftdetect file
+"
+" Language: TSX (JavaScript)
+" Maintainer: Ian Ker-Seymer <i.kerseymer@gmail.com>
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+autocmd BufNewFile,BufRead *.tsx let b:tsx_ext_found = 1
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
   augroup end
 endif
 

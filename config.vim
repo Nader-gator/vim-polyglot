@@ -1,3 +1,9 @@
+function! s:setf(filetype) abort
+  if &filetype !=# a:filetype
+    let &filetype = a:filetype
+  endif
+endfunction
+
 " Enable jsx syntax by default
 if !exists('g:jsx_ext_required')
   let g:jsx_ext_required = 0
@@ -79,9 +85,6 @@ augroup filetypedetect
 
   "jinja
   autocmd BufNewFile,BufRead *.jinja2,*.j2,*.jinja,*.nunjucks,*.nunjs,*.njk set ft=jinja
-
-  "tsx
-  autocmd BufNewFile,BufRead *.tsx setfiletype typescript.jsx
 augroup END
 
 " Fix for https://github.com/sheerun/vim-polyglot/issues/236#issuecomment-387984954
